@@ -8,8 +8,8 @@ from collections import Counter
 from PIL import Image
 
 
-im = Image.open('test.jpg') # Can be many different formats.
-pix = im.load()
+# im = Image.open('test.jpg') # Can be many different formats.
+# pix = im.load()
 
 
 def init(im,pix,K):
@@ -34,7 +34,9 @@ def get_pixels_by_label(im,label_matrix):
 
 def centroid_select(pixels_by_label,cluster_centroid):
 	for x in pixels_by_label:
+		pprint(pixels_by_label[x])
 		temp = list(map(list, pixels_by_label[x]))
+		pprint(temp)
 		centroid = np.sum(np.array(temp), axis = 0) / len(temp)
 		cluster_centroid[x] = centroid
 	return cluster_centroid
@@ -73,7 +75,7 @@ def save_result(im,pix,label_matrix,cluster_centroid,K):
 iterator = 10
 
 for K in [5,10,15,20]:
-	im = Image.open('test.jpg')
+    im = Image.open('test.jpg')
     pix = im.load()
     cluster_centroid = dict()
     for i in range(1,K+1):
@@ -86,9 +88,9 @@ for K in [5,10,15,20]:
     energy = []
     for x in range(0,iterator):
         pixels_by_label = get_pixels_by_label(im,label_matrix)
+        # energy.append(get_energyfunction_val(pixels_by_label,cluster_centroid,K))
         cluster_centroid = centroid_select(pixels_by_label,cluster_centroid)
         label_matrix = image2cluster(im,label_matrix,cluster_centroid)
-        energy.append(get_energyfunction_val(pixels_by_label,cluster_centroid,K))
 
     print("K="+str(K)+" energy function")
     show_energyfunction(iterator,energy)
